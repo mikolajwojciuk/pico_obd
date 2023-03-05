@@ -10,6 +10,7 @@ led.value(0)
 # init UART (connector is GND TX RX VDD)
 serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 
+print("\r")
 # init ELM327 (OBD reader)
 print("Resetting ELM327...")
 elm = ELM327(serial)
@@ -17,7 +18,7 @@ elm.reset()
 print("ELM reset done!")
 
 voltage = None
-
+pressure = None
 
 while True:
     # toggle led for good measure (crash indicator)
@@ -25,13 +26,14 @@ while True:
     sleep(1)
 
     try:
+        voltage = elm.read_battery_voltage()
         # speed = int(elm.get_speed())
         # rpm = int(elm.get_engine_rpm())
-        # pressure = int(elm.get_intake_manifold_pressure())
-        voltage = elm.read_battery_voltage()
+        pressure = int(elm.get_intake_manifold_pressure())
 
     except Exception:
         print("Data not recieved!")
         sleep(0.5)
 
-    print("Voltage:         ", voltage)
+    print("Voltage:     ", voltage.split()[1])
+    print("Pressure:    ", pressure)

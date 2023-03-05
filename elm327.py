@@ -115,7 +115,7 @@ class ELM327:
                 # remove whitespace
                 line = line.replace("\r", "").replace(">", "").replace(" ", "")
                 # test if UNABLETOCONNECT
-                if line == "UNABLETOCONNECT":
+                if line == "ERROR":
                     raise Exception("Car not connected")
                 # read ever set of 2 ascii chars as an 8-bit hex number
                 for i in range(0, len(line), 2):
@@ -154,8 +154,6 @@ class ELM327:
 
             try:
                 ret = decode_message(d)
-                print(ret)
-                # ret += decode_message(d)
 
             except UnicodeError:
                 print("uart decode error")

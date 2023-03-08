@@ -157,5 +157,4 @@ class ELM327:
 
             except UnicodeError:
                 print("uart decode error")
-
         return ret

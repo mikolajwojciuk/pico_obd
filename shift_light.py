@@ -1,4 +1,3 @@
-# Just a draft for playinig with 8 segment NeoPixel
 import machine, neopixel
 from time import sleep
 
@@ -48,6 +47,9 @@ while True:
         for n in range(8):
             neo_pixel[n] = (0, 0, 0)
 
+        if rpm < 4000:
+            segment_limit_off(neo_pixel)
+            neo_pixel.write()
         if 4000 < rpm <= 4500:
             segment1(neo_pixel)
             neo_pixel.write()
@@ -66,15 +68,40 @@ while True:
             segment3(neo_pixel)
             segment4(neo_pixel)
             neo_pixel.write()
-        #         if rpm > 6000:
-        #             if not limiter:
-        #                 segment_limit_on(neo_pixel)
-        #                 limiter = True
-        #                 neo_pixel.write()
-        #             if limiter:
-        #                 segment_limit_off(neo_pixel)
-        #                 limiter = False
-        #                 neo_pixel.write()
+        if rpm > 6000:
+            segment_limit_on(neo_pixel)
+            neo_pixel.write()
+            segment_limit_off(neo_pixel)
+            neo_pixel.write()
+
+    for rpm in range(6500, 0, -100):
+
+        sleep(0.05)
+        print("RPM: ", rpm)
+        for n in range(8):
+            neo_pixel[n] = (0, 0, 0)
+
+        if rpm < 4000:
+            segment_limit_off(neo_pixel)
+            neo_pixel.write()
+        if 4000 < rpm <= 4500:
+            segment1(neo_pixel)
+            neo_pixel.write()
+        if 4500 < rpm <= 5000:
+            segment1(neo_pixel)
+            segment2(neo_pixel)
+            neo_pixel.write()
+        if 5000 < rpm <= 5500:
+            segment1(neo_pixel)
+            segment2(neo_pixel)
+            segment3(neo_pixel)
+            neo_pixel.write()
+        if 5500 < rpm <= 6000:
+            segment1(neo_pixel)
+            segment2(neo_pixel)
+            segment3(neo_pixel)
+            segment4(neo_pixel)
+            neo_pixel.write()
         if rpm > 6000:
             segment_limit_on(neo_pixel)
             neo_pixel.write()

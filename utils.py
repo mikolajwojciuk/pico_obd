@@ -52,4 +52,6 @@ def decode_message(message):
 
     for char in message_list:
         decoded_message += chr(char)
+
+    print("decoded:   ", decoded_message)
     return decoded_message

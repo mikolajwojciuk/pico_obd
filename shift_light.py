@@ -14,7 +14,7 @@ class SHIFT_LIGHT:
         maximum_rpm: int,
     ):
         self.n_pixels: int = pixel_count
-        self.n_segments = segments_count
+        self.n_segments: int = segments_count
         self.pin: int = pin
         self.shift_light = neopixel.NeoPixel(Pin(self.pin), self.n_pixels)
         self.led_segments_list: list[list[int]] = self.split_led_into_segments(
@@ -38,16 +38,18 @@ class SHIFT_LIGHT:
         )
         return segments
 
-    def split_rpm_into_segments(self, min_rpm: int, max_rpm: int, n_segments: int = 5):
+    def split_rpm_into_segments(
+        self, min_rpm: int, max_rpm: int, n_segments: int = 5
+    ) -> list[int]:
         rpm_diff = (max_rpm - min_rpm) / n_segments
         rpm_segments = [int(min_rpm + n * rpm_diff) for n in range(n_segments + 1)]
         return rpm_segments
 
-    def rpm_segment(self, rpm):
+    def rpm_segment(self, rpm) -> int:
         segment = list(map(lambda i: i > rpm, self.rpm_segments_list)).index(True)
         return segment
 
-    def display_rpm(self, rpm: int):
+    def display_rpm(self, rpm: int) -> None:
         # Function for turning on LEDs according to rpm
         for led_index in range(self.n_pixels):
             self.shift_light[led_index] = (0, 0, 0)

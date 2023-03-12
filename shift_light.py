@@ -1,6 +1,5 @@
 from machine import Pin
 import neopixel
-from time import sleep
 from typing import List, Tuple
 
 
@@ -8,6 +7,7 @@ class SHIFT_LIGHT:
     def __init__(
         self,
         pixel_count: int,
+        segments_count: int,
         pin: int,
         base_colour: Tuple[int, int, int],
         limiter_colour: Tuple[int, int, int],
@@ -15,13 +15,14 @@ class SHIFT_LIGHT:
         maximum_rpm: int,
     ):
         self.n_pixels: int = pixel_count
+        self.n_segments = segments_count
         self.pin: int = pin
         self.shift_light = neopixel.NeoPixel(Pin(self.pin), self.n_pixels)
         self.led_segments_list: List[List[int]] = self.split_led_into_segments(
-            self.n_pixels, 4
+            self.n_pixels, self.n_segments
         )
         self.rpm_segments_list: List[int] = self.split_rpm_into_segments(
-            minimum_rpm, maximum_rpm, 5
+            minimum_rpm, maximum_rpm, self.n_segments + 1
         )
         self.base_colour: tuple = base_colour
         self.limiter_colour: tuple = limiter_colour
@@ -59,7 +60,7 @@ class SHIFT_LIGHT:
                 self.shift_light[n] = (0, 0, 0)
             self.shift_light.write()
 
-        elif segments_count <= 4:
+        elif segments_count <= self.n_segments:
             led_indexes = [
                 item
                 for sublist in self.rpm_segments_list[:segments_count]
@@ -68,7 +69,7 @@ class SHIFT_LIGHT:
             for led_index in led_indexes:
                 self.shift_light[led_index] = self.base_colour
             self.shift_light.write()
-        elif segments_count == 5:
+        elif segments_count == self.n_segments + 1:
             for led_index in range(self.n_pixels):
                 self.shift_light[led_index] = self.limiter_colour
             self.shift_light.write()

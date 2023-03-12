@@ -1,7 +1,7 @@
 from machine import Pin, UART
 from time import sleep
 from elm327 import ELM327
-from lcd import LCD_screen, colour
+from lcd import LCD, colour
 import math
 
 
@@ -20,7 +20,7 @@ elm.reset()
 print("ELM reset done!")
 
 print("Resetting LCD...")
-lcd = LCD_screen()
+lcd = LCD()
 lcd.fill(colour(0, 0, 0))  # BLACK
 lcd.show()
 print("LCD reset done!")

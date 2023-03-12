@@ -1,7 +1,7 @@
 from machine import Pin
 import neopixel
 from time import sleep
-from typing import List
+from typing import List, Tuple
 
 
 class SHIFT_LIGHT:
@@ -9,8 +9,8 @@ class SHIFT_LIGHT:
         self,
         pixel_count: int,
         pin: int,
-        base_colour: tuple[int, int, int],
-        limiter_colour: tuple[int, int, int],
+        base_colour: Tuple[int, int, int],
+        limiter_colour: Tuple[int, int, int],
         minimum_rpm: int,
         maximum_rpm: int,
     ):

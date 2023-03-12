@@ -3,6 +3,7 @@ from time import sleep
 from elm327 import ELM327
 from lcd import LCD, colour
 import math
+from shift_light import SHIFT_LIGHT
 
 
 # init status LED (on-board LED on the Raspberry Pi Pico)
@@ -12,18 +13,17 @@ led.value(0)
 # init UART (connector is GND TX RX VDD)
 serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 
-print("\r")
 # init ELM327 (OBD reader)
-print("Resetting ELM327...")
-elm = ELM327(serial)
-elm.reset()
-print("ELM reset done!")
+# print("Resetting ELM327...")
+# elm = ELM327(serial)
+# elm.reset()
+# print("ELM reset done!")
 
-print("Resetting LCD...")
-lcd = LCD()
-lcd.fill(colour(0, 0, 0))  # BLACK
-lcd.show()
-print("LCD reset done!")
+# print("Resetting LCD...")
+# lcd = LCD()
+# lcd.fill(colour(0, 0, 0))  # BLACK
+# lcd.show()
+# print("LCD reset done!")
 
 voltage = None
 speed = None
@@ -31,20 +31,35 @@ rpm = None
 pressure = None
 default_color = colour(255, 0, 0)
 
+shift_light = SHIFT_LIGHT(
+    pixel_count=8,
+    segments_count=4,
+    pin=4,
+    base_colour=(55, 0, 0),
+    limiter_colour=(0, 0, 100),
+    minimum_rpm=4000,
+    maximum_rpm=6500,
+)
+
 while True:
     # toggle led for good measure (crash indicator)
-    led.toggle()
-    sleep(1)
-    #
-    try:
-        voltage = elm.read_battery_voltage()
-        speed = int(elm.get_speed())
-        rpm = int(elm.get_engine_rpm())
-        pressure = int(elm.get_intake_manifold_pressure())
-    #
-    except Exception:
-        print("Data not recieved!")
-        sleep(0.5)
+    # led.toggle()
+    # sleep(1)
+    ##
+    # try:
+    #    voltage = elm.read_battery_voltage()
+    #    speed = int(elm.get_speed())
+    #    rpm = int(elm.get_engine_rpm())
+    #    pressure = int(elm.get_intake_manifold_pressure())
+    ##
+    # except Exception:
+    #    print("Data not recieved!")
+    #    sleep(0.5)
+
+    sleep(0.25)
+    rpm = 4500
+    shift_light.display_rpm(rpm)
+
     # lcd.fill(colour(0, 0, 0))
     # # sleep(0.01)
     # lcd.printstring(f"VOLTAGE", 55, 10, 3, 0, 0, colour(220, 220, 220))

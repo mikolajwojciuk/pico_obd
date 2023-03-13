@@ -106,7 +106,7 @@ class CIRCULAR_GAUGE:
         self.lcd.hline(155, 120, 15, colour(*self.scale_colour))
         self.lcd.printstring(
             (str(self.min_value) + self.parameter_units),
-            65,
+            30,
             210,
             2,
             0,
@@ -185,7 +185,11 @@ class CIRCULAR_GAUGE:
 
     @property
     def needle_angle(self):
-        angle = round((self.value / (self.max_value - self.min_value)) * 270, 1)
+        angle = round(
+            (abs(self.value - self.min_value) / abs(self.max_value - self.min_value))
+            * 270,
+            1,
+        )
         return angle
 
     def calculate_blank_needles_parameters(
@@ -201,12 +205,12 @@ class CIRCULAR_GAUGE:
     def draw_value(self):
         """Function for displaying numerical parameter value"""
         self.lcd.fill_rect(95, 160, 100, 100, colour(0, 0, 0))
-        string_value = str(float(self.value))
+        string_value = str(float(abs(self.value)))
         number_type = self.number_of_symbols
         if number_type == "decimal":
-            if self.value < 10:
+            if abs(self.value) < 10:
                 self.lcd.seg(
-                    95,
+                    110,
                     160,
                     int(string_value[0]),
                     6,
@@ -214,7 +218,7 @@ class CIRCULAR_GAUGE:
                     colour(0, 0, 0),
                 )  # blank segment
                 self.lcd.seg(
-                    135,
+                    150,
                     160,
                     int(string_value[0]),
                     6,
@@ -223,7 +227,7 @@ class CIRCULAR_GAUGE:
                 )
                 # dot is not a valid digit
                 self.lcd.seg(
-                    185,
+                    200,
                     160,
                     int(string_value[2]),
                     6,
@@ -232,7 +236,7 @@ class CIRCULAR_GAUGE:
                 )
             else:
                 self.lcd.seg(
-                    95,
+                    110,
                     160,
                     int(string_value[0]),
                     6,
@@ -240,7 +244,7 @@ class CIRCULAR_GAUGE:
                     colour(*self.value_colour),
                 )
                 self.lcd.seg(
-                    135,
+                    150,
                     160,
                     int(string_value[1]),
                     6,
@@ -249,16 +253,18 @@ class CIRCULAR_GAUGE:
                 )
                 # dot is not a valid digit
                 self.lcd.seg(
-                    185,
+                    200,
                     160,
                     int(string_value[3]),
                     6,
                     colour(0, 0, 0),
                     colour(*self.value_colour),
                 )
-            self.lcd.fill_rect(170, 205, 10, 10, colour(*self.value_colour))
+            if self.value < 0:
+                self.lcd.fill_rect(95, 185, 15, 5, colour(*self.value_colour))
+            self.lcd.fill_rect(185, 205, 10, 10, colour(*self.value_colour))
         if number_type == "non_decimal":
-            string_value = str(int(self.value))
+            string_value = str(int(abs(self.value)))
             # Padding to 3 digits
             if len(string_value) == 1:
                 string_value = "xx" + string_value
@@ -267,7 +273,7 @@ class CIRCULAR_GAUGE:
 
             if string_value[0] != "x":
                 self.lcd.seg(
-                    105,
+                    115,
                     160,
                     int(string_value[0]),
                     6,
@@ -276,7 +282,7 @@ class CIRCULAR_GAUGE:
                 )
             else:
                 self.lcd.seg(
-                    105,
+                    115,
                     160,
                     int("0"),
                     6,
@@ -309,6 +315,8 @@ class CIRCULAR_GAUGE:
                 colour(0, 0, 0),
                 colour(*self.value_colour),
             )
+            if self.value < 0:
+                self.lcd.fill_rect(95, 185, 15, 5, colour(*self.value_colour))
 
     @property
     def number_of_symbols(self):

@@ -6,39 +6,59 @@ import math
 from constant import NUMS, CMAP
 from lcd_utils import colour
 
-# Pins used for display screen
-BL = 13
-DC = 8
-RST = 12
-MOSI = 11
-SCK = 10
-CS = 9
-
 
 class LCD(framebuf.FrameBuffer):
-    def __init__(self):
-        self.width = 240
-        self.height = 240
+    def __init__(
+        self,
+        pin_BL,
+        pin_DC,
+        pin_RST,
+        pin_MOSI,
+        pin_SCK,
+        pin_CS,
+        width,
+        height,
+        spi_id,
+        spi_baudrate,
+        spi_polarity,
+        spi_phase,
+        default_red,
+        default_green,
+        default_blue,
+        default_white,
+        framebuf_type,
+    ):
+        self.width = width
+        self.height = height
+        # buffer_type = getattr(framebuf, framebuf_type)
+        # print(buffer_type)
+        # self.buffer_type = buffer_type()
 
-        self.cs = Pin(CS, Pin.OUT)
-        self.rst = Pin(RST, Pin.OUT)
+        self.cs = Pin(pin_CS, Pin.OUT)
+        self.rst = Pin(pin_RST, Pin.OUT)
 
-        self.cs(1)
-        self.spi = SPI(1)
-        self.spi = SPI(1, 1000_000)
+        self.cs(spi_id)
+        self.spi = SPI(spi_id)
+        self.spi = SPI(spi_id, spi_baudrate)
         self.spi = SPI(
-            1, 100000_000, polarity=0, phase=0, sck=Pin(SCK), mosi=Pin(MOSI), miso=None
+            spi_id,
+            spi_baudrate,
+            polarity=spi_polarity,
+            phase=spi_phase,
+            sck=Pin(pin_SCK),
+            mosi=Pin(pin_MOSI),
+            miso=None,
         )
-        self.dc = Pin(DC, Pin.OUT)
-        self.dc(1)
+        self.dc = Pin(pin_DC, Pin.OUT)
+        self.dc(spi_id)
         self.buffer = bytearray(self.height * self.width * 2)
         super().__init__(self.buffer, self.width, self.height, framebuf.RGB565)
         self.init_display()
 
-        self.red = 0x07E0  # Pre-defined colours
-        self.green = 0x001F  # Probably easier to use colour(r,g,b) defined below
-        self.blue = 0xF800
-        self.white = 0xFFFF
+        self.red = default_red  # Pre-defined colours
+        self.green = default_green  # Probably easier to use colour(r,g,b) defined below
+        self.blue = default_blue
+        self.white = default_white
 
     def write_cmd(self, cmd):
         self.cs(1)

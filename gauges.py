@@ -92,7 +92,7 @@ class CIRCULAR_GAUGE:
         self.lcd.fill(colour(0, 0, 0))
         self.lcd.printstring(
             (self.parameter_name + " " + self.parameter_units),
-            55,
+            45,
             10,
             3,
             0,

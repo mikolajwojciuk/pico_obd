@@ -95,7 +95,6 @@ class ELM327:
             cmd += f" {N}"
 
         ret = self.query(cmd)
-
         lines = ret.split("\r")
 
         # remove echo (first line is always command sent)
@@ -153,8 +152,8 @@ class ELM327:
             d = self.uart.read()
 
             try:
-                ret = decode_message(d)
-
+                # ret = decode_message(d)
+                ret = d.decode()
             except UnicodeError:
                 print("uart decode error")
         return ret

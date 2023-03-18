@@ -1,5 +1,6 @@
 from constant import EOM_default
 
+
 # utils functions
 def bytes_to_int(bs):
     """converts a big-endian byte array into a single integer"""
@@ -31,7 +32,6 @@ def decode_percent(message):
 
 def decode_rpm(message):
     """RPM is in the 0:16384 revs/min range as int."""
-
     return bytes_to_int(message[2:]) / 4
 
 
@@ -41,6 +41,7 @@ def decode_speed(message):
     return int(message[2])
 
 
+# deprecated
 def decode_message(message):
     """Function for decoding messages from elm327"""
 
@@ -53,5 +54,4 @@ def decode_message(message):
     for char in message_list:
         decoded_message += chr(char)
 
-    print("decoded:   ", decoded_message)
     return decoded_message

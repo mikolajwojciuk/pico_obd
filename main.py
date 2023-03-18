@@ -15,10 +15,10 @@ led.value(0)
 serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 
 # init ELM327 (OBD reader)
-# print("Resetting ELM327...")
-# elm = ELM327(serial)
-# elm.reset()
-# print("ELM reset done!")
+print("Resetting ELM327...")
+elm = ELM327(serial)
+elm.reset()
+print("ELM reset done!")
 
 # print("Resetting LCD...")
 # lcd = LCD()
@@ -32,50 +32,51 @@ rpm = None
 pressure = None
 default_color = colour(255, 0, 0)
 
-shift_light = SHIFT_LIGHT(
-    pixel_count=8,
-    segments_count=4,
-    pin=4,
-    base_colour=(55, 0, 0),
-    limiter_colour=(0, 0, 100),
-    minimum_rpm=4000,
-    maximum_rpm=6500,
-)
-
-circular_gauge = CIRCULAR_GAUGE(
-    scale_colour=(128, 128, 128),
-    needle_colour=(250, 0, 0),
-    value_colour=(250, 0, 0),
-    text_colour=(128, 128, 128),
-    parameter_name="TEST",
-    parameter_units="V",
-)
-circular_gauge.display_base()
+# shift_light = SHIFT_LIGHT(
+#    pixel_count=8,
+#    segments_count=4,
+#    pin=4,
+#    base_colour=(55, 0, 0),
+#    limiter_colour=(0, 0, 100),
+#    minimum_rpm=4000,
+#    maximum_rpm=6500,
+# )
+#
+# circular_gauge = CIRCULAR_GAUGE(
+#    scale_colour=(128, 128, 128),
+#    needle_colour=(250, 0, 0),
+#    value_colour=(250, 0, 0),
+#    text_colour=(128, 128, 128),
+#    parameter_name="TEST",
+#    parameter_units="V",
+# )
+# circular_gauge.display_base()
 while True:
     # toggle led for good measure (crash indicator)
     # led.toggle()
     # sleep(1)
     ##
-    # try:
-    #    voltage = elm.read_battery_voltage()
-    #    speed = int(elm.get_speed())
-    #    rpm = int(elm.get_engine_rpm())
+    try:
+        #    voltage = elm.read_battery_voltage()
+        #    speed = int(elm.get_speed())
+        rpm = int(elm.get_engine_rpm())
+        print("RPM:   ", rpm)
     #    pressure = int(elm.get_intake_manifold_pressure())
     ##
-    # except Exception:
-    #    print("Data not recieved!")
-    #    sleep(0.5)
+    except Exception:
+        print("Data not recieved!")
+        sleep(0.1)
 
     # sleep(0.25)
-    rpm = 4500
-    shift_light.display_rpm(rpm)
-    circular_gauge.update_display(
-        value=120,
-        min_value=0,
-        max_value=150,
-        parameter_name="TEST",
-        parameter_units="V",
-    )
+    # rpm = 4500
+    # shift_light.display_rpm(rpm)
+    # circular_gauge.update_display(
+    #    value=120,
+    #    min_value=0,
+    #    max_value=150,
+    #    parameter_name="TEST",
+    #    parameter_units="V",
+    # )
 
     # lcd.fill(colour(0, 0, 0))
     # # sleep(0.01)

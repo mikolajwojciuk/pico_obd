@@ -152,8 +152,7 @@ class ELM327:
             d = self.uart.read()
 
             try:
-                # ret = decode_message(d)
-                ret = d.decode()
+                ret += d.decode()
             except UnicodeError:
                 print("uart decode error")
         return ret

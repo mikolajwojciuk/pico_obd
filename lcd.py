@@ -3,7 +3,7 @@ import framebuf
 import utime
 import os
 import math
-from constant import NUMS, CMAP
+from constant import *  # NUMS, CMAP
 from lcd_utils import colour
 
 
@@ -26,18 +26,14 @@ class LCD(framebuf.FrameBuffer):
         default_green,
         default_blue,
         default_white,
-        framebuf_type,
     ):
         self.width = width
         self.height = height
-        # buffer_type = getattr(framebuf, framebuf_type)
-        # print(buffer_type)
-        # self.buffer_type = buffer_type()
 
         self.cs = Pin(pin_CS, Pin.OUT)
         self.rst = Pin(pin_RST, Pin.OUT)
 
-        self.cs(spi_id)
+        self.cs.value(spi_id)
         self.spi = SPI(spi_id)
         self.spi = SPI(spi_id, spi_baudrate)
         self.spi = SPI(
@@ -50,7 +46,7 @@ class LCD(framebuf.FrameBuffer):
             miso=None,
         )
         self.dc = Pin(pin_DC, Pin.OUT)
-        self.dc(spi_id)
+        self.dc.value(spi_id)
         self.buffer = bytearray(self.height * self.width * 2)
         super().__init__(self.buffer, self.width, self.height, framebuf.RGB565)
         self.init_display()
@@ -61,24 +57,24 @@ class LCD(framebuf.FrameBuffer):
         self.white = default_white
 
     def write_cmd(self, cmd):
-        self.cs(1)
-        self.dc(0)
-        self.cs(0)
+        self.cs.value(1)
+        self.dc.value(0)
+        self.cs.value(0)
         self.spi.write(bytearray([cmd]))
-        self.cs(1)
+        self.cs.value(1)
 
     def write_data(self, buf):
-        self.cs(1)
-        self.dc(1)
-        self.cs(0)
+        self.cs.value(1)
+        self.dc.value(1)
+        self.cs.value(0)
         self.spi.write(bytearray([buf]))
-        self.cs(1)
+        self.cs.value(1)
 
     def init_display(self):
         """Initialize display"""
-        self.rst(1)
-        self.rst(0)
-        self.rst(1)
+        self.rst.value(1)
+        self.rst.value(0)
+        self.rst.value(1)
 
         self.write_cmd(0x36)
         self.write_data(0x70)
@@ -171,11 +167,11 @@ class LCD(framebuf.FrameBuffer):
 
         self.write_cmd(0x2C)
 
-        self.cs(1)
-        self.dc(1)
-        self.cs(0)
+        self.cs.value(1)
+        self.dc.value(1)
+        self.cs.value(0)
         self.spi.write(self.buffer)
-        self.cs(1)
+        self.cs.value(1)
 
     def seg(self, xx, yy, n, f, bg, fg):
         # (x, y, number, size-factor, background, foreground)

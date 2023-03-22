@@ -19,7 +19,6 @@ DISPLAY_RED = 0x07E0
 DISPLAY_GREEN = 0x001F
 DISPLAY_BLUE = 0xF800
 DISPLAY_WHITE = 0xFFFF
-FRAMEBUF_TYPE = "RGB565"
 
 # 7-seg character definations and routines
 NUMS = [

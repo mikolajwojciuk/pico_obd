@@ -1,4 +1,4 @@
-from machine import Pin
+from machine import Pin, Timer
 import neopixel
 
 
@@ -27,6 +27,9 @@ class SHIFT_LIGHT:
         self.limiter_colour: tuple = limiter_colour
         self.min_rpm: int = minimum_rpm
         self.max_rpm: int = maximum_rpm
+        self.limiter_counter = 0
+        self.limiter_status = False
+        self.limiter_counter_toggle = 10
 
     def split_led_into_segments(
         self, n_pixels: int, n_segments: int
@@ -71,9 +74,20 @@ class SHIFT_LIGHT:
                 self.shift_light[led_index] = self.base_colour
             self.shift_light.write()
         elif segments_count == self.n_segments + 1:
-            for led_index in range(self.n_pixels):
-                self.shift_light[led_index] = self.limiter_colour
-            self.shift_light.write()
-            for led_index in range(self.n_pixels):
-                self.shift_light[led_index] = (0, 0, 0)
-            self.shift_light.write()
+            self.limiter_counter += 1
+            self.toggle_limiter()
+            print(self.limiter_counter)
+            print(self.limiter_status)
+            if self.limiter_status:
+                for led_index in range(self.n_pixels):
+                    self.shift_light[led_index] = self.limiter_colour
+                self.shift_light.write()
+            if not self.limiter_status:
+                for led_index in range(self.n_pixels):
+                    self.shift_light[led_index] = (0, 0, 0)
+                self.shift_light.write()
+
+    def toggle_limiter(self):
+        if self.limiter_counter >= self.limiter_counter_toggle:
+            self.limiter_counter = 0
+            self.limiter_status = not self.limiter_status

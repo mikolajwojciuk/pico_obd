@@ -32,43 +32,46 @@ rpm = None
 pressure = None
 default_color = colour(255, 0, 0)
 
-# shift_light = SHIFT_LIGHT(
-#    pixel_count=8,
-#    segments_count=4,
-#    pin=4,
-#    base_colour=(55, 0, 0),
-#    limiter_colour=(0, 0, 100),
-#    minimum_rpm=4000,
-#    maximum_rpm=6500,
+shift_light = SHIFT_LIGHT(
+    pixel_count=8,
+    segments_count=4,
+    pin=4,
+    base_colour=(55, 0, 0),
+    limiter_colour=(0, 0, 100),
+    minimum_rpm=4000,
+    maximum_rpm=6500,
+)
+#
+# circular_gauge = CIRCULAR_GAUGE(
+#    scale_colour=(128, 128, 128),
+#    needle_colour=(250, 0, 0),
+#    value_colour=(250, 0, 0),
+#    text_colour=(128, 128, 128),
+#    parameter_name="TEST",
+#    parameter_units="V",
+# )
+# circular_gauge.display_base()
+# circular_gauge.update_display(
+#    value=0,
+#    min_value=-0.5,
+#    max_value=1.5,
+#    parameter_name="BOOST",
+# #   parameter_units="bar",
 # )
 #
-circular_gauge = CIRCULAR_GAUGE(
-    scale_colour=(128, 128, 128),
-    needle_colour=(250, 0, 0),
-    value_colour=(250, 0, 0),
-    text_colour=(128, 128, 128),
-    parameter_name="TEST",
-    parameter_units="V",
-)
-# circular_gauge.display_base()
-circular_gauge.update_display(
-    value=0,
-    min_value=-0.5,
-    max_value=1.5,
-    parameter_name="BOOST",
-    parameter_units="bar",
-)
-
-numerical_gauge = NUMERICAL_GAUGE(
-    value_colour=(255, 0, 0),
-    text_colour=(128, 128, 128),
-    parameter_name="TEST",
-    parameter_units="V",
-)
-numerical_gauge.display_base()
+# numerical_gauge = NUMERICAL_GAUGE(
+#    value_colour=(255, 0, 0),
+#    text_colour=(128, 128, 128),
+#    parameter_name="TEST",
+#    parameter_units="V",
+# )
+# numerical_gauge.display_base()
 while True:
+    for n in range(0, 7000, 250):
+        print(n)
+        shift_light.display_rpm(n)
     # circular_gauge.update_display(value=1)
-    numerical_gauge.update_display()
+    # numerical_gauge.update_display()
     # toggle led for good measure (crash indicator)
     # led.toggle()
     # sleep(1)

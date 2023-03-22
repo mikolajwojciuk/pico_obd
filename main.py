@@ -20,11 +20,24 @@ serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 # elm.reset()
 # print("ELM reset done!")
 
+# init display
 # print("Resetting LCD...")
 # lcd = LCD()
 # lcd.fill(colour(0, 0, 0))  # BLACK
 # lcd.show()
 # print("LCD reset done!")
+
+# init buttons
+keyA = Pin(15, Pin.IN, Pin.PULL_UP)  # Normally 1 but 0 if pressed
+keyB = Pin(17, Pin.IN, Pin.PULL_UP)
+keyX = Pin(19, Pin.IN, Pin.PULL_UP)
+keyY = Pin(21, Pin.IN, Pin.PULL_UP)
+
+up = Pin(2, Pin.IN, Pin.PULL_UP)
+down = Pin(18, Pin.IN, Pin.PULL_UP)
+left = Pin(16, Pin.IN, Pin.PULL_UP)
+right = Pin(20, Pin.IN, Pin.PULL_UP)
+ctrl = Pin(3, Pin.IN, Pin.PULL_UP)
 
 voltage = None
 speed = None
@@ -34,42 +47,82 @@ default_color = colour(255, 0, 0)
 
 shift_light = SHIFT_LIGHT(
     pixel_count=8,
-    segments_count=4,
+    segments_count=8,
     pin=4,
     base_colour=(55, 0, 0),
-    limiter_colour=(0, 0, 100),
+    limiter_colour=(0, 0, 200),
     minimum_rpm=4000,
     maximum_rpm=6500,
 )
 #
 # circular_gauge = CIRCULAR_GAUGE(
-#    scale_colour=(128, 128, 128),
-#    needle_colour=(250, 0, 0),
-#    value_colour=(250, 0, 0),
-#    text_colour=(128, 128, 128),
-#    parameter_name="TEST",
-#    parameter_units="V",
+#     scale_colour=(128, 128, 128),
+#     needle_colour=(250, 0, 0),
+#     value_colour=(250, 0, 0),
+#     text_colour=(128, 128, 128),
+#     parameter_name="TEST",
+#     parameter_units="V",
 # )
 # circular_gauge.display_base()
 # circular_gauge.update_display(
-#    value=0,
-#    min_value=-0.5,
-#    max_value=1.5,
-#    parameter_name="BOOST",
-# #   parameter_units="bar",
+#     value=12.7,
+#     min_value=0,
+#     max_value=15,
+#     parameter_name="TEST",
+#     parameter_units="V",
 # )
-#
+sleep(0.5)
 # numerical_gauge = NUMERICAL_GAUGE(
-#    value_colour=(255, 0, 0),
-#    text_colour=(128, 128, 128),
-#    parameter_name="TEST",
-#    parameter_units="V",
+#     value_colour=(255, 0, 0),
+#     text_colour=(128, 128, 128),
+#     parameter_name="TEST",
+#     parameter_units="V",
 # )
 # numerical_gauge.display_base()
+# numerical_gauge.update_display(min_value=0,max_value=15,value=12.7)
+
 while True:
-    for n in range(0, 7000, 250):
-        print(n)
-        shift_light.display_rpm(n)
+    print(keyA.value())
+    if keyA.value() == 0:
+        print("Key A pressed")
+    if keyB.value() == 0:
+        print("Key B pressed")
+    if keyX.value() == 0:
+        print("Key X pressed")
+    if keyY.value() == 0:
+        print("Key Y pressed")
+
+    if up.value() == 0:
+        print("Key up pressed")
+        circular_gauge = CIRCULAR_GAUGE(
+            scale_colour=(128, 128, 128),
+            needle_colour=(250, 0, 0),
+            value_colour=(250, 0, 0),
+            text_colour=(128, 128, 128),
+            parameter_name="TEST",
+            parameter_units="V",
+        )
+        circular_gauge.display_base()
+    if down.value() == 0:
+        print("Key down pressed")
+        numerical_gauge = NUMERICAL_GAUGE(
+            value_colour=(255, 0, 0),
+            text_colour=(128, 128, 128),
+            parameter_name="TEST",
+            parameter_units="V",
+        )
+        numerical_gauge.display_base()
+    if left.value() == 0:
+        print("Key left pressed")
+    if right.value() == 0:
+        print("Key right pressed")
+    if ctrl.value() == 0:
+        print("Key ctrl pressed")
+    sleep(0.1)
+    # for n in range(0,6500,5):
+    #    shift_light.display_rpm(n)
+    # print(n)
+    # sleep(0.1)
     # circular_gauge.update_display(value=1)
     # numerical_gauge.update_display()
     # toggle led for good measure (crash indicator)

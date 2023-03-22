@@ -7,6 +7,7 @@ import math
 class CIRCULAR_GAUGE:
     def __init__(
         self,
+        lcd: LCD,
         scale_colour: tuple[int, int, int],
         needle_colour: tuple[int, int, int],
         value_colour: tuple[int, int, int],
@@ -14,24 +15,7 @@ class CIRCULAR_GAUGE:
         parameter_name: str = "PARAMETER",
         parameter_units: str = "UNITS",
     ):
-        self.lcd = LCD(
-            BL,
-            DC,
-            RST,
-            MOSI,
-            SCK,
-            CS,
-            WIDTH,
-            HEIGHT,
-            SPI_ID,
-            SPI_BAUDRATE,
-            SPI_POLARITY,
-            SPI_PHASE,
-            DISPLAY_RED,
-            DISPLAY_GREEN,
-            DISPLAY_BLUE,
-            DISPLAY_WHITE,
-        )
+        self.lcd = lcd
         self.scale_colour = scale_colour
         self.needle_colour = needle_colour
         self.value_colour = value_colour
@@ -329,29 +313,13 @@ class CIRCULAR_GAUGE:
 class NUMERICAL_GAUGE:
     def __init__(
         self,
+        lcd: LCD,
         value_colour: tuple[int, int, int],
         text_colour: tuple[int, int, int],
         parameter_name: str = "PARAMETER",
         parameter_units: str = "UNITS",
     ):
-        self.lcd = LCD(
-            BL,
-            DC,
-            RST,
-            MOSI,
-            SCK,
-            CS,
-            WIDTH,
-            HEIGHT,
-            SPI_ID,
-            SPI_BAUDRATE,
-            SPI_POLARITY,
-            SPI_PHASE,
-            DISPLAY_RED,
-            DISPLAY_GREEN,
-            DISPLAY_BLUE,
-            DISPLAY_WHITE,
-        )
+        self.lcd = lcd
         self.value_colour = value_colour
         self.text_colour = text_colour
         self.parameter_name = parameter_name

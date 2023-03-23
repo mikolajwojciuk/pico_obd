@@ -302,10 +302,87 @@ class CIRCULAR_GAUGE:
             if self.value < 0:
                 self.lcd.fill_rect(95, 185, 15, 5, colour(*self.value_colour))
 
+        if value_type == "four_digits":
+            string_value = str(int(abs(self.value)))
+            # Padding to 4 digits
+            if len(string_value) == 1:
+                string_value = "xxx" + string_value
+            if len(string_value) == 2:
+                string_value = "xx" + string_value
+            if len(string_value) == 3:
+                string_value = "x" + string_value
+
+            if string_value[0] != "x":
+                self.lcd.seg(
+                    115,
+                    160,
+                    int(string_value[0]),
+                    4,
+                    colour(0, 0, 0),
+                    colour(*self.value_colour),
+                )
+            else:
+                self.lcd.seg(
+                    115,
+                    160,
+                    int("0"),
+                    4,
+                    colour(0, 0, 0),
+                    colour(0, 0, 0),
+                )
+            if string_value[1] != "x":
+                self.lcd.seg(
+                    145,
+                    160,
+                    int(string_value[1]),
+                    4,
+                    colour(0, 0, 0),
+                    colour(*self.value_colour),
+                )
+            else:
+                self.lcd.seg(
+                    145,
+                    160,
+                    int("0"),
+                    4,
+                    colour(0, 0, 0),
+                    colour(0, 0, 0),
+                )
+            if string_value[2] != "x":
+                self.lcd.seg(
+                    175,
+                    160,
+                    int(string_value[2]),
+                    4,
+                    colour(0, 0, 0),
+                    colour(*self.value_colour),
+                )
+            else:
+                self.lcd.seg(
+                    175,
+                    160,
+                    int("0"),
+                    4,
+                    colour(0, 0, 0),
+                    colour(0, 0, 0),
+                )
+            self.lcd.seg(
+                205,
+                160,
+                int(string_value[3]),
+                4,
+                colour(0, 0, 0),
+                colour(*self.value_colour),
+            )
+            if self.value < 0:
+                self.lcd.fill_rect(95, 185, 15, 5, colour(*self.value_colour))
+
     @property
     def value_type(self):
         if (self.max_value - self.min_value) < 100:
             return "decimal"
+        elif (self.max_value - self.min_value) >= 1000:
+            return "four_digits"
         else:
             return "non_decimal"
 

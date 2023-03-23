@@ -16,10 +16,10 @@ led.value(0)
 serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 
 # init ELM327 (OBD reader)
-# print("Resetting ELM327...")
-# elm = ELM327(serial)
-# elm.reset()
-# print("ELM reset done!")
+#print("Resetting ELM327...")
+#elm = ELM327(serial)
+#elm.reset()
+#print("ELM reset done!")
 
 # init display
 print("Resetting LCD...")
@@ -57,10 +57,8 @@ left = Pin(16, Pin.IN, Pin.PULL_UP)
 right = Pin(20, Pin.IN, Pin.PULL_UP)
 ctrl = Pin(3, Pin.IN, Pin.PULL_UP)
 
-voltage = None
-speed = None
-rpm = None
-pressure = None
+
+rpm = 0
 default_color = colour(255, 0, 0)
 
 shift_light = SHIFT_LIGHT(
@@ -79,36 +77,43 @@ circular_gauge = CIRCULAR_GAUGE(
     needle_colour=(250, 0, 0),
     value_colour=(250, 0, 0),
     text_colour=(128, 128, 128),
-    parameter_name="TEST",
-    parameter_units="V",
+    parameter_name="RPM",
+    parameter_units="",
 )
 circular_gauge.display_base()
 circular_gauge.update_display(
     min_value=0,
-    max_value=15,
-    parameter_name="TEST",
-    parameter_units="V",
+    max_value=7000,
+    parameter_name="RPM",
+    parameter_units="",
 )
 # sleep(5)
 numerical_gauge = NUMERICAL_GAUGE(
     lcd,
     value_colour=(255, 0, 0),
     text_colour=(128, 128, 128),
-    parameter_name="TEST",
-    parameter_units="V",
+    parameter_name="RPM",
+    parameter_units="",
 )
 numerical_gauge.display_base()
-numerical_gauge.update_display(min_value=0, max_value=15)
+numerical_gauge.update_display(min_value=0, max_value=7000)
 
 
 current_gauge = circular_gauge
 circular_gauge.display_base()
-test_value = 0
+
 while True:
-    sleep(0.05)
-    test_value += 0.05
-    value = test_value
+    
+    rpm += 50
+    sleep(0.1)
+#     try:
+#         rpm = int(elm.get_engine_rpm())
+#     except:
+#         print("Data not recieved!")
+
+    value = rpm
     current_gauge.update_display(value=value)
+    shift_light.display_rpm(rpm)
 
     if up.value() == 0:
         print("Key up pressed")
@@ -123,11 +128,5 @@ while True:
         lcd.fill(colour(0, 0, 0))  # BLACK
         lcd.show()
         # numerical_gauge.display_base()
-        numerical_gauge.update_display(min_value=0, max_value=15, value=value)
+        numerical_gauge.update_display(min_value=0, max_value=7000, value=value)
         current_gauge = numerical_gauge
-    if left.value() == 0:
-        print("Key left pressed")
-    if right.value() == 0:
-        print("Key right pressed")
-    if ctrl.value() == 0:
-        print("Key ctrl pressed")

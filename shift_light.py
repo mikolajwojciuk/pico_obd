@@ -29,7 +29,7 @@ class SHIFT_LIGHT:
         self.max_rpm: int = maximum_rpm
         self.limiter_counter = 0
         self.limiter_status = False
-        self.limiter_counter_toggle = 10
+        self.limiter_counter_toggle = 1
 
     def split_led_into_segments(
         self, n_pixels: int, n_segments: int
@@ -54,6 +54,8 @@ class SHIFT_LIGHT:
 
     def display_rpm(self, rpm: int) -> None:
         # Function for turning on LEDs according to rpm
+        if rpm >= self.max_rpm:
+            rpm = self.max_rpm - 1
         for led_index in range(self.n_pixels):
             self.shift_light[led_index] = (0, 0, 0)
 
@@ -76,8 +78,6 @@ class SHIFT_LIGHT:
         elif segments_count == self.n_segments + 1:
             self.limiter_counter += 1
             self.toggle_limiter()
-            print(self.limiter_counter)
-            print(self.limiter_status)
             if self.limiter_status:
                 for led_index in range(self.n_pixels):
                     self.shift_light[led_index] = self.limiter_colour

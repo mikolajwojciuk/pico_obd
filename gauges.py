@@ -107,7 +107,7 @@ class CIRCULAR_GAUGE:
             0,
             colour(*self.scale_colour),
         )
-        self.lcd.show()
+        self.display_values()
 
     def display_values(self):
         """Function for displaying actual reading"""
@@ -450,13 +450,14 @@ class NUMERICAL_GAUGE:
         if parameter_units is not None:
             self.update_parameter_units(parameter_units)
             self.display_base()
-        if value is not None:
+        if value is not None and value != self.value:
             self.update_value(value)
             self.display_values()
 
     def display_base(self):
         """Function for displaying the background"""
         self.lcd.fill(colour(0, 0, 0))
+        self.display_values()
         self.lcd.printstring(
             (self.parameter_name + " " + self.parameter_units),
             45,
@@ -471,7 +472,7 @@ class NUMERICAL_GAUGE:
 
     def display_values(self):
         """Function for displaying actual reading"""
-        self.draw_value()
+        self.draw_value()  # This function will update the display value
         self.lcd.show()
 
     def draw_value(self):

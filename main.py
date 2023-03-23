@@ -16,11 +16,10 @@ led.value(0)
 serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 
 # init ELM327 (OBD reader)
-#print("Resetting ELM327...")
-#elm = ELM327(serial)
-#elm.reset()
-#print("ELM reset done!")
-
+print("Resetting ELM327...")
+elm = ELM327(serial)
+# elm.reset()
+print("ELM reset done!")
 # init display
 print("Resetting LCD...")
 lcd = LCD(
@@ -59,6 +58,7 @@ ctrl = Pin(3, Pin.IN, Pin.PULL_UP)
 
 
 rpm = 0
+voltage = 0
 default_color = colour(255, 0, 0)
 
 shift_light = SHIFT_LIGHT(
@@ -80,14 +80,16 @@ circular_gauge = CIRCULAR_GAUGE(
     parameter_name="RPM",
     parameter_units="",
 )
+sleep(2)
 circular_gauge.display_base()
+sleep(2)
 circular_gauge.update_display(
     min_value=0,
-    max_value=7000,
+    max_value=15,
     parameter_name="RPM",
     parameter_units="",
 )
-# sleep(5)
+sleep(2)
 numerical_gauge = NUMERICAL_GAUGE(
     lcd,
     value_colour=(255, 0, 0),
@@ -95,25 +97,32 @@ numerical_gauge = NUMERICAL_GAUGE(
     parameter_name="RPM",
     parameter_units="",
 )
+sleep(2)
 numerical_gauge.display_base()
-numerical_gauge.update_display(min_value=0, max_value=7000)
+sleep(2)
+numerical_gauge.update_display(min_value=0, max_value=15)
+sleep(2)
 
+current_gauge = numerical_gauge
+# circular_gauge.display_base()
 
-current_gauge = circular_gauge
-circular_gauge.display_base()
+n = 0
+while n < 100:
+    n += 1
 
-while True:
-    
-    rpm += 50
     sleep(0.1)
-#     try:
-#         rpm = int(elm.get_engine_rpm())
-#     except:
-#         print("Data not recieved!")
 
-    value = rpm
+    try:
+        #    rpm = int(elm.get_engine_rpm())
+        voltage = elm.read_battery_voltage()
+        voltage = float(voltage.split("\r")[1][:-1])
+
+    except:
+        print("Data not recieved!")
+
+    value = voltage
     current_gauge.update_display(value=value)
-    shift_light.display_rpm(rpm)
+    shift_light.display_rpm(value)
 
     if up.value() == 0:
         print("Key up pressed")
@@ -127,6 +136,6 @@ while True:
         print("Key down pressed")
         lcd.fill(colour(0, 0, 0))  # BLACK
         lcd.show()
-        # numerical_gauge.display_base()
-        numerical_gauge.update_display(min_value=0, max_value=7000, value=value)
+        numerical_gauge.display_base()
+        numerical_gauge.update_display(value=value)
         current_gauge = numerical_gauge

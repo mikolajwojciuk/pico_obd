@@ -1,9 +1,7 @@
 from machine import Pin, SPI, PWM
 import framebuf
-import utime
-import os
 import math
-from constant import *  # NUMS, CMAP
+from fonts import CMAP, NUMS
 from lcd_utils import colour
 
 

@@ -1,5 +1,4 @@
 from lcd import LCD
-from constant import *
 from lcd_utils import colour
 import math
 
@@ -56,28 +55,32 @@ class CIRCULAR_GAUGE:
         parameter_name=None,
         parameter_units=None,
     ):
+        display_base = False
         if min_value is not None:
             self.update_range_min(min_value)
-            self.display_base()
+            display_base = True
         if max_value is not None:
             self.update_range_max(max_value)
-            self.display_base()
+            display_base = True
         if parameter_name is not None:
             self.update_parameter_name(parameter_name)
-            self.display_base()
+            display_base = True
         if parameter_units is not None:
             self.update_parameter_units(parameter_units)
-            self.display_base()
+            display_base = True
         if value is not None and value != self.value:
             self.update_value(value)
             self.display_values()
+
+        if display_base:
+            self.display_base()
 
     def display_base(self):
         """Function for displaying the background"""
         self.lcd.fill(colour(0, 0, 0))
         self.lcd.printstring(
             (self.parameter_name + " " + self.parameter_units),
-            45,
+            25,
             10,
             3,
             0,
@@ -438,21 +441,25 @@ class NUMERICAL_GAUGE:
         parameter_name=None,
         parameter_units=None,
     ):
+        display_base = False
         if min_value is not None:
             self.update_range_min(min_value)
-            self.display_base()
+            display_base = True
         if max_value is not None:
             self.update_range_max(max_value)
-            self.display_base()
+            display_base = True
         if parameter_name is not None:
             self.update_parameter_name(parameter_name)
-            self.display_base()
+            display_base = True
         if parameter_units is not None:
             self.update_parameter_units(parameter_units)
-            self.display_base()
+            display_base = True
         if value is not None and value != self.value:
             self.update_value(value)
             self.display_values()
+
+        if display_base:
+            self.display_base()
 
     def display_base(self):
         """Function for displaying the background"""
@@ -460,7 +467,7 @@ class NUMERICAL_GAUGE:
         self.display_values()
         self.lcd.printstring(
             (self.parameter_name + " " + self.parameter_units),
-            45,
+            25,
             10,
             3,
             0,
@@ -505,7 +512,7 @@ class NUMERICAL_GAUGE:
             )
             number_box_width += 2 * self.spacing_width + self.dot_dimension
 
-        number_box_x_min = int((WIDTH - number_box_width) / 2)
+        number_box_x_min = int((240 - number_box_width) / 2)
 
         if self.is_value_negative:
             self.lcd.fill_rect(

@@ -1,25 +1,3 @@
-# Default End Of Message
-EOM_default = "\r\r>"
-
-# LCD screen related values
-BL = 13
-DC = 8
-RST = 12
-MOSI = 11
-SCK = 10
-CS = 9
-
-WIDTH = 240
-HEIGHT = 240
-SPI_ID = 1
-SPI_BAUDRATE = 100000_000
-SPI_POLARITY = 0
-SPI_PHASE = 0
-DISPLAY_RED = 0x07E0
-DISPLAY_GREEN = 0x001F
-DISPLAY_BLUE = 0xF800
-DISPLAY_WHITE = 0xFFFF
-
 # 7-seg character definations and routines
 NUMS = [
     1,

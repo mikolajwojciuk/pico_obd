@@ -1,6 +1,3 @@
-from constant import EOM_default
-
-
 # utils functions
 def bytes_to_int(bs):
     """converts a big-endian byte array into a single integer"""

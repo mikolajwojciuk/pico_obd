@@ -1,6 +1,7 @@
 from time import sleep
 from elm_utils import *
-from constant import EOM_default
+
+EOM_default = "\r\r>"
 
 
 class ELM327:

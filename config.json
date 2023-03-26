@@ -1,0 +1,90 @@
+{
+   "PARAMETERS": [
+      {
+         "parameter_name": "RPM",
+         "units": "",
+         "min_value": 0,
+         "max_value": 6500
+      },
+      {
+         "parameter_name": "Coolant",
+         "units": "C",
+         "min_value": -25,
+         "max_value": 125
+      },
+      {
+         "parameter_name": "IMP",
+         "units": "kPa",
+         "min_value": 0,
+         "max_value": 255
+      },
+      {
+         "parameter_name": "Speed",
+         "units": "Km/h",
+         "min_value": 0,
+         "max_value": 255
+      },
+      {
+         "parameter_name": "Oil temp.",
+         "units": "C",
+         "min_value": -25,
+         "max_value": 150
+      },
+      {
+         "parameter_name": "Voltage",
+         "units": "V",
+         "min_value": 0,
+         "max_value": 15
+      }
+   ],
+   "SHIFT_LIGHT": {
+      "pixel_count": 8,
+      "segments_count": 8,
+      "base_colour": [
+         55,
+         0,
+         0
+      ],
+      "limiter_colour": [
+         0,
+         0,
+         200
+      ],
+      "minimum_rpm": 4000,
+      "maximum_rpm": 6500
+   },
+   "CIRCULAR_GAUGE": {
+      "scale_colour": [
+         128,
+         128,
+         128
+      ],
+      "needle_colour": [
+         250,
+         0,
+         0
+      ],
+      "value_colour": [
+         250,
+         0,
+         0
+      ],
+      "text_colour": [
+         128,
+         128,
+         128
+      ]
+   },
+   "NUMERICAL_GAUGE": {
+      "value_colour": [
+         250,
+         0,
+         0
+      ],
+      "text_colour": [
+         128,
+         128,
+         128
+      ]
+   }
+}

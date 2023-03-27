@@ -1,5 +1,5 @@
 # utils functions
-def bytes_to_int(bs):
+def bytes_to_int(bs) -> int:
     """converts a big-endian byte array into a single integer"""
     v = 0
     p = 0
@@ -27,9 +27,9 @@ def decode_percent(message):
     return int(message[2]) * 100.0 / 255.0
 
 
-def decode_rpm(message):
+def decode_rpm(message) -> int:
     """RPM is in the 0:16384 revs/min range as int."""
-    return bytes_to_int(message[2:]) / 4
+    return bytes_to_int(message[2:]) // 4
 
 
 def decode_speed(message):
@@ -38,7 +38,11 @@ def decode_speed(message):
     return int(message[2])
 
 
-# deprecated
+def decode_voltage(message):
+    return float(message.split("\r")[1][:-1])
+
+
+# deprecated, will be deleted in the future
 def decode_message(message):
     """Function for decoding messages from elm327"""
 

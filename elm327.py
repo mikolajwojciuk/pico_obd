@@ -26,6 +26,13 @@ class ELM327:
             ("01", "11"): 0,  # throttle position
             ("01", "5C"): 0,  # engine oil temperature
             ("09", "02"): 0,  # VIN
+            ("01", "0B"): 0,  # intake manifold pressure
+            ("01", "06"): 0,  # short time fuel trim
+            ("01", "07"): 0,  # long time fuel trim
+            ("01", "0F"): 0,  # intake air temperaure
+            ("01", "0E"): 0,  # timing advance
+            ("01", "11"): 0,  # throttle position
+            ("01", "2F"): 0,  # fuel level
         }
 
     def reset(self):
@@ -34,10 +41,11 @@ class ELM327:
 
     def read_battery_voltage(self):
         """Read the voltage at the car's battery."""
-        return self.AT("RV")
+        ret = self.AT("RV")
+        return decode_voltage(ret)
 
     def search_protocol(self):
-        return self.set_protocol("0")
+        return self.set_protocol("00")
 
     def set_protocol(self, protocol):
         return self.AT(f"SP {protocol}")
@@ -48,9 +56,10 @@ class ELM327:
 
     def get_intake_manifold_pressure(self):
         ret = self.obd_get_current_data("0B")
+        print(ret)
         return decode_pressure(ret[0])
 
-    def get_engine_rpm(self):
+    def get_engine_rpm(self) -> int:
         ret = self.obd_get_current_data("0C")
         return decode_rpm(ret[0])
 
@@ -82,7 +91,7 @@ class ELM327:
         ret = self.obd_get_current_data("11")
         return decode_percent(ret[0])
 
-    def get_fuel_percent(self):
+    def get_fuel_level(self):
         ret = self.obd_get_current_data("2F")
         return decode_percent(ret[0])
 

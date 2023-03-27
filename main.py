@@ -12,7 +12,7 @@ serial = UART(0, baudrate=38400, tx=Pin(0), rx=Pin(1))
 print("UART initialized!")
 
 # initialize ELM327 (OBD reader)
-#elm = ELM327(serial)
+# elm = ELM327(serial)
 # elm.reset()
 print("ELM327 initialized!")
 
@@ -65,9 +65,28 @@ imp = 123
 speed = 91
 oil_temp = 58
 voltage = 14.4
+stft = 0.51
+ltft = -8.2
+intake_air_temp = 36
+timing_advance = -21.37
+throttle_pos = 27.8
+fuel_level = 51.5
 
 
-test_values = [rpm, coolant, imp, speed, oil_temp, voltage]
+test_values = [
+    rpm,
+    coolant,
+    imp,
+    speed,
+    oil_temp,
+    voltage,
+    stft,
+    ltft,
+    intake_air_temp,
+    timing_advance,
+    throttle_pos,
+    fuel_level,
+]
 
 
 default_color = colour(255, 0, 0)

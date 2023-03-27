@@ -62,6 +62,30 @@ class ELM327:
         ret = self.obd_get_current_data("5C")
         return decode_temperature(ret[0])
 
+    def get_stft(self):  # Get short time fuel trim 1
+        ret = self.obd_get_current_data("06")
+        return decode_percent(ret[0])
+
+    def get_ltft(self):  # Get long time fuel trim 1
+        ret = self.obd_get_current_data("07")
+        return decode_percent(ret[0])
+
+    def get_intake_air_temp(self):
+        ret = self.obd_get_current_data("0F")
+        return decode_temperature(ret[0])
+
+    def get_timing_advance(self):  # EXPERIMENTAL, might require new decoding
+        ret = self.obd_get_current_data("0E")
+        return decode_percent(ret[0])
+
+    def get_throttle_position(self):
+        ret = self.obd_get_current_data("11")
+        return decode_percent(ret[0])
+
+    def get_fuel_percent(self):
+        ret = self.obd_get_current_data("2F")
+        return decode_percent(ret[0])
+
     def get_vin(self):
         ret = self.obd_get_vehicle_information("02")
         # TODO: parse return
